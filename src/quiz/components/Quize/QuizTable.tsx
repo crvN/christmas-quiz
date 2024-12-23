@@ -2,7 +2,6 @@ import {useQuizQuestions} from '../../../context/useQuizQuestions.tsx'
 import {Link} from 'react-router'
 import {styled} from '@stitches/react'
 import {Button} from 'antd'
-import {useState} from 'react'
 
 const TableStyled = styled('table', {
 	width: '100%',
@@ -29,15 +28,20 @@ const CellStyled = styled('td', {
 	minWidth: '200px',
 })
 export const QuizTable = () => {
-	const [round, setRound] = useState<number>(1)
-	const {getFirstRoundQuestions, getSecondRoundQuestions, getThirdRoundQuestions, getFourthRoundQuestions} =
-		useQuizQuestions()
+	const {
+		getFirstRoundQuestions,
+		getSecondRoundQuestions,
+		getThirdRoundQuestions,
+		getFourthRoundQuestions,
+		currentRound,
+		setCurrentRound,
+	} = useQuizQuestions()
 	const questions = [
 		getFirstRoundQuestions(),
 		getSecondRoundQuestions(),
 		getThirdRoundQuestions(),
 		getFourthRoundQuestions(),
-	][round - 1]
+	][currentRound - 1]
 	const prices = [...new Set(questions.map(question => question.price))]
 	const categories = [...new Set(questions.map(question => question.category))]
 	return (
@@ -52,7 +56,7 @@ export const QuizTable = () => {
 							{prices.map(price => {
 								const question = questions.find(question => question.price === price && question.category === category)
 								if (!question || question.finished) {
-									return <CellStyled></CellStyled>
+									return <CellStyled key={`${price}${category}`}></CellStyled>
 								}
 								return (
 									<CellStyled key={`${price}${category}`} css={{textAlign: 'center'}}>
@@ -67,7 +71,7 @@ export const QuizTable = () => {
 
 			<Button
 				onClick={() => {
-					setRound(round + 1)
+					setCurrentRound(currentRound + 1)
 				}}
 				type="primary"
 				disabled={questions.some(question => !question.finished)}

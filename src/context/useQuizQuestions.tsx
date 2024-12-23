@@ -3,6 +3,9 @@ import React, {useState} from 'react'
 import gentlemenImg from '../assets/gentlemen.png'
 import jokerImg from '../assets/joker.png'
 import legendImg from '../assets/i-m-legend.png'
+import tomAndJerry from '../assets/tom-and-jerry-ringtone.mp3'
+import simpsons from '../assets/simpsons-ost.mov'
+import chipAndDale from '../assets/chip_and_dale-crop.mp3'
 
 const firstRoundQuestions: Question[] = [
 	{
@@ -192,34 +195,35 @@ const secondRoundQuestions: Question[] = [
 
 const thirdRoundQuestions: Question[] = [
 	{
-		id: 19,
-		round: 3,
-		category: 'Географія Різдва',
-		price: 300,
-		question: 'У якій країні на Різдво запускають найбільшу кількість феєрверків?',
-		answer: 'Бразилія',
-		type: 'text',
-		difficulty: 'easy',
-	},
-	{
 		id: 20,
 		round: 3,
-		category: 'Географія Різдва',
+		category: 'Мультфільм OST',
+		price: 300,
+		answer: 'Сімпсони',
+		type: 'sound',
+		difficulty: 'easy',
+		sound: simpsons,
+	},
+	{
+		id: 19,
+		round: 3,
+		category: 'Мультфільм OST',
 		price: 600,
-		question: "Яке місто має прізвисько 'Різдвяна столиця Європи'?",
-		answer: 'Страсбург',
-		type: 'text',
+		answer: 'Том і Джеррі',
+		type: 'sound',
 		difficulty: 'medium',
+		sound: tomAndJerry,
 	},
 	{
 		id: 21,
 		round: 3,
-		category: 'Географія Різдва',
+		category: 'Мультфільм OST',
 		price: 900,
 		question: "Яке місто має прізвисько 'Різдвяна столиця Європи'?",
-		answer: 'Страсбург',
-		type: 'text',
+		answer: 'Чіп і Дейл',
+		type: 'sound',
 		difficulty: 'hard',
+		sound: chipAndDale,
 	},
 	{
 		id: 22,
@@ -288,6 +292,8 @@ const QUIZ_QUESTIONS: Question[] = [
 type QuestionsContext = {
 	questions: Question[]
 	selectedQuestion: Question | undefined
+	currentRound: number
+	setCurrentRound: (round: number) => void
 	setSelectedQuestion: (question: Question) => void
 	getFirstRoundQuestions: () => Question[]
 	getSecondRoundQuestions: () => Question[]
@@ -306,6 +312,7 @@ export const QuizQuestionsProvider: React.FC<React.PropsWithChildren> = ({childr
 
 const useQuestions = (): QuestionsContext => {
 	const [questions, setQuestions] = useState<Question[]>(QUIZ_QUESTIONS)
+	const [currentRound, setCurrentRound] = useState<number>(1)
 	const [selectedQuestion, setSelectedQuestion] = useState<Question | undefined>()
 	const getQuestionByRound = (round: number) => questions.filter(question => question.round === round)
 	const getFirstRoundQuestions = () => getQuestionByRound(1)
@@ -320,6 +327,8 @@ const useQuestions = (): QuestionsContext => {
 	return {
 		questions,
 		selectedQuestion,
+		currentRound,
+		setCurrentRound,
 		getQuestionById,
 		markQuestionAsFinished,
 		setSelectedQuestion,

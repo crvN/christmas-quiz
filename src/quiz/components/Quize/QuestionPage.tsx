@@ -21,6 +21,10 @@ const QuestionStyled = styled('div', {
 	margin: '36px auto',
 })
 
+const AssetsWrapper = styled('div', {
+	margin: '24px auto',
+})
+
 export const QuestionPage: React.FC = () => {
 	const {id} = useParams<{id: string}>()
 	const [showAnswer, setShowAnswer] = useState<boolean>(false)
@@ -33,29 +37,58 @@ export const QuestionPage: React.FC = () => {
 	const barPercent = 100 - (time / TIMER_DURATION) * 100
 
 	const onShowAnswerClick = () => {
-		if (selectedTeamId === undefined) {
+		if (selectedTeamId === undefined && time > 0) {
 			alert('Виберіть команду')
 			return
 		}
-		markQuestionAsFinished(Number(id))
+		if (time === 0) {
+			markQuestionAsFinished(Number(id))
+			setShowAnswer(true)
+			return
+		}
 		addPoints(selectedTeamId!, question?.price || 0)
 		selectTeam(undefined)
+		markQuestionAsFinished(Number(id))
 		setShowAnswer(true)
+	}
+
+	const renderQuestion = () => {
+		switch (question?.type) {
+			case 'text':
+				return <QuestionStyled>{question?.question}</QuestionStyled>
+			case 'img':
+				return (
+					<AssetsWrapper>
+						<img src={question?.image} alt="question" />
+					</AssetsWrapper>
+				)
+			case 'sound':
+				return (
+					<AssetsWrapper>
+						<audio src={question?.sound} controls />
+					</AssetsWrapper>
+				)
+			default:
+				return null
+		}
 	}
 	return (
 		<Flex vertical style={{width: '100%', position: 'relative'}}>
-			<TimerBlock onClick={reset}>
-				<Progress percent={barPercent} type="circle" format={() => time} strokeColor={'red'} size={50} />
-			</TimerBlock>
+			{question?.type !== 'sound' && (
+				<TimerBlock onClick={reset}>
+					<Progress percent={barPercent} type="circle" format={() => time} strokeColor={'red'} size={50} />
+				</TimerBlock>
+			)}
 			{!showAnswer ? (
 				<div>
-					{question?.type === 'text' && <QuestionStyled>{question?.question}</QuestionStyled>}
-					{question?.type === 'img' && (
-						<div>
-							<img src={question?.image} alt="question" />
-						</div>
-					)}
-					<Button variant="outlined" type="primary" onClick={onShowAnswerClick} size={'large'}>
+					{renderQuestion()}
+					<Button
+						variant="outlined"
+						type="primary"
+						onClick={onShowAnswerClick}
+						style={{marginTop: '24px'}}
+						size={'large'}
+					>
 						Відповідь
 					</Button>
 				</div>

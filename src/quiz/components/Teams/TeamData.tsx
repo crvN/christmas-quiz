@@ -1,6 +1,10 @@
 import {useTeamContext} from '../../../context/TeamsContext.tsx'
 import {Team} from '../../../types/team.ts'
 import {styled} from '@stitches/react'
+import {Button, Flex, Input, InputNumber} from 'antd'
+import {useQuizQuestions} from '../../../context/useQuizQuestions.tsx'
+import {useState} from 'react'
+import {MinusOutlined, PlusOutlined} from '@ant-design/icons'
 
 const TeamCard = styled('div', {
 	border: '1px solid black',
@@ -22,30 +26,61 @@ const TeamCard = styled('div', {
 	},
 })
 
+const stopPropagation = (cb: () => void) => (e: React.MouseEvent) => {
+	e.stopPropagation()
+	cb()
+}
+
 const Title = styled('h3', {
 	margin: 0,
 })
 
-const TeamControls = styled('div', {
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'flex-start',
-	gap: '10px',
-})
-
 export const TeamData: React.FC<{team: Team}> = ({team}) => {
-	const {selectTeam, selectedTeamId} = useTeamContext()
-	// const [score, setScore] = useState<string>('')
+	const {selectTeam, selectedTeamId, updateScore, addPoints} = useTeamContext()
+	const {currentRound} = useQuizQuestions()
+	const [bet, setBet] = useState<string>('')
 	return (
 		<TeamCard onClick={() => selectTeam(team.id)} selected={selectedTeamId === team.id}>
 			<Title>{team.name}</Title>
-			<p>
-				<strong>Рахунок:</strong> {team.score}
-			</p>
-			{/*<TeamControls>*/}
-			{/*	<Input placeholder="Задати кількість балів" value={score} onChange={e => setScore(e.target.value)} />*/}
-			{/*	<Button onClick={() => updateScore(team.id, +score)}>Додати</Button>*/}
-			{/*</TeamControls>*/}
+			<Flex align="center">
+				<strong>Рахунок:</strong>{' '}
+				<Input
+					type="text"
+					variant="borderless"
+					value={team.score}
+					onChange={e => updateScore(team.id, +e.target.value)}
+					onClick={e => e.stopPropagation()}
+				/>
+			</Flex>
+			{currentRound === 4 && (
+				<Flex gap="small">
+					<strong>Ставка:</strong>{' '}
+					<InputNumber
+						size="small"
+						onClick={e => e.stopPropagation()}
+						value={bet}
+						onChange={value => setBet(value === null ? '' : value)}
+					/>
+					<Button
+						variant="solid"
+						size="small"
+						type="primary"
+						shape="circle"
+						onClick={stopPropagation(() => addPoints(team.id, +bet))}
+						icon={<PlusOutlined />}
+					/>{' '}
+					<Button
+						size="small"
+						color="danger"
+						variant="solid"
+						shape="circle"
+						onClick={stopPropagation(() => {
+							addPoints(team.id, +`-${bet}`)
+						})}
+						icon={<MinusOutlined />}
+					/>
+				</Flex>
+			)}
 		</TeamCard>
 	)
 }

@@ -29,17 +29,18 @@ export const TeamsContainer = () => {
 			<Typography.Title level={5}>
 				<TitleText>Додати команду</TitleText>
 			</Typography.Title>
-			<Space.Compact>
-				<Input type="text" value={teamName} onChange={e => setTeamName(e.target.value)} />
-				<Button
-					onClick={() => {
-						createTeam(teamName)
-						setTeamName('')
-					}}
-					type="primary"
-					icon={<PlusOutlined />}
-				/>
-			</Space.Compact>
+			<form
+				onSubmit={e => {
+					e.preventDefault()
+					createTeam(teamName)
+					setTeamName('')
+				}}
+			>
+				<Space.Compact>
+					<Input type="text" value={teamName} onChange={e => setTeamName(e.target.value)} />
+					<Button htmlType="submit" type="primary" icon={<PlusOutlined />} />
+				</Space.Compact>
+			</form>
 			<TeamsData>
 				{teams.map(team => (
 					<TeamData key={team.id} team={team} />
