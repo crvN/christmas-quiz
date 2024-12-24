@@ -46,7 +46,7 @@ export const QuizTable = () => {
 	const categories = [...new Set(questions.map(question => question.category))]
 	return (
 		<GameContainer>
-			<h2>Quiz Table</h2>
+			<h2>Christmas Quiz</h2>
 
 			<TableStyled>
 				<tbody>
@@ -69,17 +69,19 @@ export const QuizTable = () => {
 				</tbody>
 			</TableStyled>
 
-			<Button
-				onClick={() => {
-					setCurrentRound(currentRound + 1)
-				}}
-				type="primary"
-				disabled={questions.some(question => !question.finished)}
-				size={'large'}
-				style={{marginRight: 'auto', marginTop: '36px'}}
-			>
-				Наступний раунд
-			</Button>
+			{currentRound < 4 && (
+				<Button
+					onClick={() => {
+						setCurrentRound(currentRound + 1)
+					}}
+					type="primary"
+					disabled={questions.some(question => !question.finished)}
+					size={'large'}
+					style={{marginRight: 'auto', marginTop: '36px'}}
+				>
+					Наступний раунд
+				</Button>
+			)}
 		</GameContainer>
 	)
 }

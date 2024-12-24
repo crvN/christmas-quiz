@@ -156,8 +156,8 @@ const secondRoundQuestions: Question[] = [
 		round: 2,
 		category: 'Різдвяні легенди та історії',
 		price: 600,
-		question: 'Як звали трьох волхвів, які прийшли до новонародженого Ісуса?',
-		answer: 'Мельхіор, Гаспар(Каспар), Балтазар',
+		question: 'Головним символом якого свята є коза?',
+		answer: 'Маланка',
 		type: 'text',
 		difficulty: 'hard',
 	},
@@ -255,6 +255,36 @@ const thirdRoundQuestions: Question[] = [
 		difficulty: 'hard',
 		image: legendImg,
 	},
+	{
+		id: 25,
+		round: 3,
+		category: 'Різдвяні страви світу',
+		price: 300,
+		question: 'Яка страва є традиційною на Різдво у Великобританії?',
+		type: 'text',
+		answer: 'Індичка',
+		difficulty: 'easy',
+	},
+	{
+		id: 26,
+		round: 3,
+		category: 'Різдвяні страви світу',
+		price: 600,
+		question: 'Яка страва є традиційною на Різдво у Італії?',
+		type: 'text',
+		answer: 'Панеттоне',
+		difficulty: 'medium',
+	},
+	{
+		id: 27,
+		round: 3,
+		category: 'Різдвяні страви світу',
+		price: 900,
+		question: 'Що таке штоллен і з якої країни він походить?',
+		type: 'text',
+		answer: 'Різдвяний хліб з Німеччини',
+		difficulty: 'hard',
+	},
 ]
 
 const fourthRoundQuestions: Question[] = [
@@ -312,7 +342,7 @@ export const QuizQuestionsProvider: React.FC<React.PropsWithChildren> = ({childr
 
 const useQuestions = (): QuestionsContext => {
 	const [questions, setQuestions] = useState<Question[]>(QUIZ_QUESTIONS)
-	const [currentRound, setCurrentRound] = useState<number>(1)
+	const [currentRound, setCurrentRound] = useState<number>(4)
 	const [selectedQuestion, setSelectedQuestion] = useState<Question | undefined>()
 	const getQuestionByRound = (round: number) => questions.filter(question => question.round === round)
 	const getFirstRoundQuestions = () => getQuestionByRound(1)
