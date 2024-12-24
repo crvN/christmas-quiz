@@ -342,7 +342,7 @@ export const QuizQuestionsProvider: React.FC<React.PropsWithChildren> = ({childr
 
 const useQuestions = (): QuestionsContext => {
 	const [questions, setQuestions] = useState<Question[]>(QUIZ_QUESTIONS)
-	const [currentRound, setCurrentRound] = useState<number>(4)
+	const [currentRound, setCurrentRound] = useState<number>(1)
 	const [selectedQuestion, setSelectedQuestion] = useState<Question | undefined>()
 	const getQuestionByRound = (round: number) => questions.filter(question => question.round === round)
 	const getFirstRoundQuestions = () => getQuestionByRound(1)
